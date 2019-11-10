@@ -1,0 +1,40 @@
+
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Functional_Test_Apps", "Functional_Test_Apps", "{23A9D1FA-8F8D-439A-8FB8-EF458CC7C873}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Analog_Temp_Sensor", "Functional_Test_Apps\Analog_Temp_Sensor\Analog_Temp_Sensor.csproj", "{9027EA7A-272B-421D-B20E-626E657C0A69}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Meadow.Core", "..\..\..\Meadow.Core\source\Meadow.Core\Meadow.Core.csproj", "{A23DEF94-E44D-40E1-AC58-C89C4178FEAA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Meadow.Foundation.Core", "..\..\..\Meadow.Foundation\Source\Meadow.Foundation.Core\Meadow.Foundation.Core.csproj", "{C12FF8D5-30BD-49D7-BAA2-292352EF61B8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Therm", "Therm\Therm.csproj", "{F0B3E698-C1A3-4CD5-B043-1E965454CC25}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9027EA7A-272B-421D-B20E-626E657C0A69}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9027EA7A-272B-421D-B20E-626E657C0A69}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9027EA7A-272B-421D-B20E-626E657C0A69}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9027EA7A-272B-421D-B20E-626E657C0A69}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A23DEF94-E44D-40E1-AC58-C89C4178FEAA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A23DEF94-E44D-40E1-AC58-C89C4178FEAA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A23DEF94-E44D-40E1-AC58-C89C4178FEAA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A23DEF94-E44D-40E1-AC58-C89C4178FEAA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C12FF8D5-30BD-49D7-BAA2-292352EF61B8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C12FF8D5-30BD-49D7-BAA2-292352EF61B8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C12FF8D5-30BD-49D7-BAA2-292352EF61B8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C12FF8D5-30BD-49D7-BAA2-292352EF61B8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F0B3E698-C1A3-4CD5-B043-1E965454CC25}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F0B3E698-C1A3-4CD5-B043-1E965454CC25}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F0B3E698-C1A3-4CD5-B043-1E965454CC25}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F0B3E698-C1A3-4CD5-B043-1E965454CC25}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{9027EA7A-272B-421D-B20E-626E657C0A69} = {23A9D1FA-8F8D-439A-8FB8-EF458CC7C873}
+	EndGlobalSection
+EndGlobal
