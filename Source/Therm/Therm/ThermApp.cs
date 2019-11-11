@@ -5,6 +5,7 @@ using Meadow.Devices;
 using Meadow.Hardware;
 using Meadow.Peripherals.Sensors.Temperature;
 using Meadow.Foundation.Sensors.Temperature;
+using Meadow.Peripherals.Sensors.Atmospheric;
 
 namespace Therm
 {
@@ -13,10 +14,6 @@ namespace Therm
         AnalogTemperature _tempSensor;
         ClimateController _climateController;
         HvacController _hvacController;
-
-        IPin _heaterPin = Device.Pins.D00;
-        IPin _airConPin = Device.Pins.D01;
-        IPin _fanPin    = Device.Pins.D02;
 
         public ThermApp()
         {
@@ -37,11 +34,12 @@ namespace Therm
                 AnalogTemperature.KnownSensorType.TMP35);
 
             // subscribe to 1/4º C changes in temp
-            this._tempSensor.Subscribe(new FilterableObserver<FloatChangeResult, float>(
+            this._tempSensor.Subscribe(new FilterableObserver<AtmosphericConditionChangeResult, AtmosphericConditions>(
                 h => {
                     // probably update screen or something
+                    Console.WriteLine($"Current Temp: {h.New}ºC");
                 },
-                e => { return (Math.Abs(e.Delta) > 0.25f); }));
+                e => { return (Math.Abs(e.Delta.Temperature) > 0.25f); }));
         }
 
         protected void InitializeControllers()
@@ -50,9 +48,9 @@ namespace Therm
             // that it manages here, because only it should be accessing them
             // directly.
             _hvacController = new HvacController(
-                Device.CreateDigitalOutputPort(_heaterPin),
-                Device.CreateDigitalOutputPort(_airConPin),
-                Device.CreateDigitalOutputPort(_fanPin)
+                Device.CreateDigitalOutputPort(IOMap.Heater.Item2),
+                Device.CreateDigitalOutputPort(IOMap.AirCon.Item2),
+                Device.CreateDigitalOutputPort(IOMap.Fan.Item2)
                 );
 
             _climateController = new ClimateController(

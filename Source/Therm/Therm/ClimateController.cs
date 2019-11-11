@@ -17,9 +17,9 @@ namespace Therm
         protected HvacController _hvacController;
         protected AnalogTemperature _tempSensor;
         protected int _standbyDuration = 30000; // 30 second on/off intervals
+        protected ClimateModel _desiredClimate;
 
         public bool IsRunning { get; protected set; } = false;
-        public float TargetTemperature { get; protected set; }
         public Mode CurrentMode { get; protected set; }
 
         public ClimateController(
@@ -31,10 +31,12 @@ namespace Therm
             this._tempSensor = temperatureSensor;
         }
 
-        public void SetDesiredTemperature(float tempC, Mode mode)
+        public void SetDesiredClimate(ClimateModel model)
         {
-            this.TargetTemperature = tempC;
-            this.CurrentMode = mode;
+            this._desiredClimate = model;
+            this.CurrentMode = model.HvacOperatingMode;
+            // if we're not already running, call running.
+            // if we are running, it'll pick up the new changes during the cycle
             StartMaintainingClimate();
         }
 
