@@ -14,6 +14,7 @@ namespace Therm
         AnalogTemperature _tempSensor;
         ClimateController _climateController;
         HvacController _hvacController;
+        UXController _uxController;
 
         public ThermApp()
         {
@@ -22,6 +23,9 @@ namespace Therm
 
             // init our controllers
             this.InitializeControllers();
+
+            // wire things up
+            this.WireUpEventing();
 
             // get things spun up
             this.Start();
@@ -57,6 +61,18 @@ namespace Therm
                 this._hvacController,
                 this._tempSensor
                 );
+
+            _uxController = new UXController();
+        }
+
+        protected void WireUpEventing()
+        {
+            // when there's UX input to change the climate, send it on to the
+            // climate controller
+            _uxController.ClimateModelChanged += (object sender, ClimateModelResult e) => {
+                _climateController.SetDesiredClimate(e.Model);
+            };
+
         }
 
         protected void Start()
