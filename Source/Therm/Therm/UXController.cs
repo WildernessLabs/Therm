@@ -27,13 +27,19 @@ namespace Therm
 
         public UXController()
         {
-            this.InitializePeripherals();
             this.InitControllers();
+            this.InitializePeripherals();
         }
 
         protected void InitControllers()
         {
             _displayController = new DisplayController();
+
+            // handle changes from touch screen changes (future functionality)
+            _displayController.ClimateModelChanged += (s, e) => {
+                this.UpdateUX(e.Model);
+                this.RaiseClimateModelChange(e.Model);
+            };
         }
 
         protected void InitializePeripherals()
@@ -91,7 +97,8 @@ namespace Therm
         {
             //
             this._climateModel = climateModel;
-            // TODO: call into the DisplayController.Update or whatever;
+            // update the display
+            this._displayController.UpdateClimate(climateModel);
         }
 
         protected void RaiseClimateModelChange(ClimateModel model)
