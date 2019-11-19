@@ -20,7 +20,7 @@ namespace BasicAnalog_Temp_Sensor
 
         public void ConfigurePorts()
         {
-            
+
             //_annieInnie = Device.CreateAnalogInputPort(Device.Pins.A00);
 
             _tmpSensor = new AnalogTemperature(
@@ -37,11 +37,19 @@ namespace BasicAnalog_Temp_Sensor
                 //Console.WriteLine($"Analog voltage value: {await _annieInnie.Read()}");
 
 
-                var temp = await _tmpSensor.Read();
-                Console.WriteLine("Temp: " + temp);
+                var conditions = await _tmpSensor.Read();
+
+                Console.WriteLine($"Temp: {conditions.Temperature}ºC, {conditions.Temperature.ToFahrenheit()}ºF.");
                 Thread.Sleep(1000);
             }
         }
 
+    }
+    public static class TempExtension
+    {
+        public static float ToFahrenheit(this float from)
+        {
+            return (from * 9) / 5 + 32;
+        }
     }
 }

@@ -34,14 +34,15 @@ namespace Therm
         protected void ConfigurePeripherals()
         {
             _tempSensor = new AnalogTemperature(
-                Device, Device.Pins.A00,
+                IOMap.AnalogTempSensor.Item1, IOMap.AnalogTempSensor.Item2,
                 AnalogTemperature.KnownSensorType.TMP35);
 
             // subscribe to 1/4º C changes in temp
             this._tempSensor.Subscribe(new FilterableObserver<AtmosphericConditionChangeResult, AtmosphericConditions>(
                 h => {
                     // probably update screen or something
-                    Console.WriteLine($"Current Temp: {h.New}ºC");
+                    Console.WriteLine($"Current Temp: {h.New.Temperature}ºC");
+                    //_uxController.UpdateUX(h.New);
                 },
                 e => { return (Math.Abs(e.Delta.Temperature) > 0.25f); }));
         }

@@ -44,9 +44,11 @@ namespace Therm
 
         protected void InitializePeripherals()
         {
+            Console.WriteLine("UXController.InitializePeripherals");
+
             _upButton = new PushButton(IOMap.UpButton.Item1, IOMap.UpButton.Item2);
             _downButton = new PushButton(IOMap.DownButton.Item1, IOMap.DownButton.Item2);
-            _modeButton = new PushButton(IOMap.ModeButton.Item1, IOMap.DownButton.Item2);
+            _modeButton = new PushButton(IOMap.ModeButton.Item1, IOMap.ModeButton.Item2);
 
             _upButton.Clicked += (s,e) => {
                 //if(this._climateModel.DesiredTemperature + 1 < someMax) {
