@@ -64,14 +64,15 @@ namespace Therm
 
         protected void Render()
         {
-            Task.Run(() => {
+//            Task.Run(() => {
                 //rendering tasks on BG thread
+                _graphics.Clear();
                 _graphics.CurrentFont = new Font12x16();
                 _graphics.DrawText(4, 4, $"current temp: {_climate.CurrentConditions.Temperature.ToString("###")}º", Color.FromHex("24abe3"));
                 _graphics.DrawText(4, 20, $"desired temp: {_climate.DesiredTemperature.ToString("###")}º", Color.FromHex("EF7D3B"));
                 _graphics.DrawText(4, 40, "all temps Canadian", Color.White);
                 _graphics.Show();
-            });
+//            });
         }
     }
 }

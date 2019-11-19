@@ -1,15 +1,38 @@
 ﻿using System;
+using Meadow;
 using Meadow.Peripherals.Sensors.Atmospheric;
 
 namespace Therm
 {
+    public class ClimateModelChangeResult : IChangeResult<ClimateModel>
+    {
+        /// <summary>
+        /// Current/new event value.
+        /// </summary>
+        public ClimateModel New { get; set; }
+        /// <summary>
+        /// Previous value.
+        /// </summary>
+        public ClimateModel Old { get; set; }
+
+        public ClimateModelChangeResult(ClimateModel newValue, ClimateModel oldValue)
+        {
+            this.New = newValue;
+            this.Old = oldValue;
+        }
+    }
+
     public class ClimateModel
     {
         public float DesiredTemperature { get; set; }
 
-        public ClimateController.Mode HvacOperatingMode { get; set; }
+        public ClimateController.Mode HvacOperatingMode {
+            get; set;
+        } = ClimateController.Mode.Off;
 
-        public AtmosphericConditions CurrentConditions { get; set; }
+        public AtmosphericConditions CurrentConditions {
+            get; set;
+        } = new AtmosphericConditions();
 
         public ClimateModel()
         {

@@ -1,4 +1,5 @@
 ﻿using System;
+using Meadow;
 using Meadow.Foundation.Sensors.Buttons;
 using Meadow.Hardware;
 using Meadow.Peripherals.Sensors.Buttons;
@@ -11,15 +12,7 @@ namespace Therm
     /// </summary>
     public class UXController
     {
-        /// <summary>
-        /// Raised when the desired climate settings are changed via the display
-        /// or physical UI.
-        /// </summary>
-        public event EventHandler<ClimateModelResult> ClimateModelChanged = delegate { };
-
         protected DisplayController _displayController;
-
-        protected ClimateModel _climateModel;
 
         protected IButton _upButton;
         protected IButton _downButton;
@@ -35,11 +28,21 @@ namespace Therm
         {
             _displayController = new DisplayController();
 
-            // handle changes from touch screen changes (future functionality)
+            // when there's an update from the touch screen, send it on to the
+            // model manager (future functionality)
             _displayController.ClimateModelChanged += (s, e) => {
-                this.UpdateUX(e.Model);
-                this.RaiseClimateModelChange(e.Model);
+                ThermApp.ModelManager.UpdateDesiredClimate(e.Model);
             };
+
+            // when the climate model changes, make sure to update the UX
+            ThermApp.ModelManager.Subscribe(new FilterableObserver<ClimateModelChangeResult, ClimateModel>(
+                h => {
+                    Console.WriteLine("UXController: Climate model changed, updating display.");
+                    this._displayController.UpdateClimate(ThermApp.ModelManager.Climate);
+                }
+            ));
+
+            Console.WriteLine("UXController Up");
         }
 
         protected void InitializePeripherals()
@@ -51,23 +54,22 @@ namespace Therm
             _modeButton = new PushButton(IOMap.ModeButton.Item1, IOMap.ModeButton.Item2);
 
             _upButton.Clicked += (s,e) => {
+                // TODO: do some checks here:
                 //if(this._climateModel.DesiredTemperature + 1 < someMax) {
-                ClimateModel newClimate = ClimateModel.From(this._climateModel);
+                ClimateModel newClimate = ClimateModel.From(ThermApp.ModelManager.Climate);
                 newClimate.DesiredTemperature++;
-                this.UpdateUX(newClimate);
-                this.RaiseClimateModelChange(newClimate);
+                ThermApp.ModelManager.UpdateDesiredClimate(newClimate);
             };
 
             _upButton.Clicked += (s,e) => {
-                //if(this._climateModel.DesiredTemperature - 1 > someMin) {
-                ClimateModel newClimate = ClimateModel.From(this._climateModel);
+                //if(this._climateModel.DesiredTemperature - 1 > someMin) {                
+                ClimateModel newClimate = ClimateModel.From(ThermApp.ModelManager.Climate);
                 newClimate.DesiredTemperature--;
-                this.UpdateUX(newClimate);
-                this.RaiseClimateModelChange(newClimate);
+                ThermApp.ModelManager.UpdateDesiredClimate(newClimate);
             };
 
             _modeButton.Clicked += (s, e) => {
-                ClimateModel newClimate = ClimateModel.From(this._climateModel);
+                ClimateModel newClimate = ClimateModel.From(ThermApp.ModelManager.Climate);
                 // cycle to the next mode
                 switch (newClimate.HvacOperatingMode) {
                     case ClimateController.Mode.Auto:
@@ -86,26 +88,18 @@ namespace Therm
                         newClimate.HvacOperatingMode = ClimateController.Mode.Auto;
                         break;
                 }
-                this.UpdateUX(newClimate);
-                this.RaiseClimateModelChange(newClimate);
+                ThermApp.ModelManager.UpdateDesiredClimate(newClimate);
             };
         }
 
-        /// <summary>
-        /// Updates the UX with the current climate conditions and operating mode.
-        /// </summary>
-        /// <param name="climateModel"></param>
-        public void UpdateUX(ClimateModel climateModel)
-        {
-            //
-            this._climateModel = climateModel;
-            // update the display
-            this._displayController.UpdateClimate(climateModel);
-        }
-
-        protected void RaiseClimateModelChange(ClimateModel model)
-        {
-            this.ClimateModelChanged?.Invoke(this, new ClimateModelResult(model));
-        }
+        ///// <summary>
+        ///// Updates the UX with the current climate conditions and operating mode.
+        ///// </summary>
+        ///// <param name="climateModel"></param>
+        //public void UpdateUX(ClimateModel climateModel)
+        //{
+        //    // update the display
+        //    this._displayController.UpdateClimate(climateModel);
+        //}
     }
 }
