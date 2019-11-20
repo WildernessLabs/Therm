@@ -7,4 +7,34 @@
   <ItemGroup>
     <PackageReference Include="Meadow.Foundation" Version="0.11.0" />
   </ItemGroup>
+  <ItemGroup>
+    <None Remove="HackKitDisplay\bin\Debug\net472\App.exe" />
+    <None Remove="HackKitDisplay\obj\HackKitDisplay.csproj.nuget.g.props" />
+    <None Remove="HackKitDisplay\obj\HackKitDisplay.csproj.nuget.g.targets" />
+    <None Remove="HackKitDisplay\obj\HackKitDisplay.csproj.nuget.dgspec.json" />
+    <None Remove="HackKitDisplay\obj\project.assets.json" />
+    <None Remove="HackKitDisplay\obj\HackKitDisplay.csproj.nuget.cache" />
+    <None Remove="HackKitDisplay\obj\Debug\net472\HackKitDisplay.csproj.FileListAbsolute.txt" />
+    <None Remove="HackKitDisplay\obj\Debug\net472\App.exe.withSupportedRuntime.config" />
+    <None Remove="HackKitDisplay\obj\Debug\net472\HackKitDisplay.exe.withSupportedRuntime.config" />
+    <None Remove="HackKitDisplay\obj\Debug\net472\HackKitDisplay.assets.cache" />
+    <None Remove="HackKitDisplay\obj\Debug\net472\HackKitDisplay.csprojAssemblyReference.cache" />
+    <None Remove="HackKitDisplay\obj\Debug\net472\HackKitDisplay.AssemblyInfoInputs.cache" />
+    <None Remove="HackKitDisplay\obj\Debug\net472\App.exe" />
+    <None Remove="HackKitDisplay\obj\Debug\net472\App.pdb" />
+    <None Remove="HackKitDisplay\bin\Debug\net472\Meadow.Foundation.dll" />
+    <None Remove="HackKitDisplay\bin\Debug\net472\TftSpi.dll" />
+    <None Remove="HackKitDisplay\bin\Debug\net472\Meadow.dll" />
+    <None Remove="HackKitDisplay\bin\Debug\net472\GraphicsLibrary.dll" />
+    <None Remove="HackKitDisplay\bin\Debug\net472\mscorlib.dll" />
+    <None Remove="HackKitDisplay\bin\Debug\net472\System.dll" />
+    <None Remove="HackKitDisplay\bin\Debug\net472\System.Core.dll" />
+    <None Remove="HackKitDisplay\obj\Debug\net472\HackKitDisplay.csproj.CopyComplete" />
+    <None Remove="HackKitDisplay\bin\Debug\net472\App.pdb" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="HackKitDisplay\HackKitDisplay.cs" />
+    <Compile Remove="HackKitDisplay\Program.cs" />
+    <Compile Remove="HackKitDisplay\obj\Debug\net472\HackKitDisplay.AssemblyInfo.cs" />
+  </ItemGroup>
 </Project>

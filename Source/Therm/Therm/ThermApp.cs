@@ -40,32 +40,11 @@ namespace Therm
                 IOMap.AnalogTempSensor.Item1, IOMap.AnalogTempSensor.Item2,
                 AnalogTemperature.KnownSensorType.TMP35);
 
-            // subscribe to 1/4º C changes in temp
-            this._tempSensor.Subscribe(new FilterableObserver<AtmosphericConditionChangeResult, AtmosphericConditions>(
-                h => {
-                    // probably update screen or something
-                    Console.WriteLine($"Current Temp: {h.New.Temperature}ºC");
-                    ModelManager.UpdateAmbientTemp(h.New.Temperature);
-                },
-                e => { return (Math.Abs(e.Delta.Temperature) > 0.25f); }));
         }
 
         protected void InitializeControllers()
         {
-            // create our hvac controller. note that we create the outputs
-            // that it manages here, because only it should be accessing them
-            // directly.
-            _hvacController = new HvacController(
-                Device.CreateDigitalOutputPort(IOMap.Heater.Item2),
-                Device.CreateDigitalOutputPort(IOMap.AirCon.Item2),
-                Device.CreateDigitalOutputPort(IOMap.Fan.Item2)
-                );
-
-            _climateController = new ClimateController(
-                this._hvacController,
-                this._tempSensor
-                );
-
+            _climateController = new ClimateController();
             _uxController = new UXController();
         }
 
@@ -75,14 +54,14 @@ namespace Therm
         /// </summary>
         protected void WireUpEventing()
         {
-            // when there's UX input to change the climate, send it on to the
-            // climate controller
-            ModelManager.Subscribe(new FilterableObserver<ClimateModelChangeResult, ClimateModel> (
+            // subscribe to 1/4º C changes in temp
+            this._tempSensor.Subscribe(new FilterableObserver<AtmosphericConditionChangeResult, AtmosphericConditions>(
                 h => {
-                    _climateController.SetDesiredClimate(h.New);
-                }
-            ));
-
+                    // probably update screen or something
+                    Console.WriteLine($"Current Temp: {h.New.Temperature}ºC");
+                    ModelManager.UpdateAmbientTemp(h.New.Temperature);
+                },
+                e => { return (Math.Abs(e.Delta.Temperature) > 0.25f); }));
         }
 
         /// <summary>
@@ -101,7 +80,9 @@ namespace Therm
 
             //
             Console.WriteLine("Starting up the temp sensor.");
-            _tempSensor.StartUpdating();
+            _tempSensor.StartUpdating(standbyDuration: 1000);
+
+            Console.WriteLine("Temp sensor spinning");
         }
     }
 }

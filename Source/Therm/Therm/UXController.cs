@@ -91,15 +91,5 @@ namespace Therm
                 ThermApp.ModelManager.UpdateDesiredClimate(newClimate);
             };
         }
-
-        ///// <summary>
-        ///// Updates the UX with the current climate conditions and operating mode.
-        ///// </summary>
-        ///// <param name="climateModel"></param>
-        //public void UpdateUX(ClimateModel climateModel)
-        //{
-        //    // update the display
-        //    this._displayController.UpdateClimate(climateModel);
-        //}
     }
 }

@@ -14,39 +14,55 @@ namespace Therm
     /// </summary>
     public class ClimateController
     {
+        // internals
         protected HvacController _hvacController;
-        protected AnalogTemperature _tempSensor;
+        //protected AnalogTemperature _tempSensor;
         protected int _standbyDuration = 30000; // 30 second on/off intervals
-        protected ClimateModel _desiredClimate;
+        protected ClimateModel _desiredClimateOperation;
 
+        // internal thread lock
+        private object _climateMaintLock = new object();
+        private CancellationTokenSource _climateMaintCancelToken;
+
+        // state
         public bool IsRunning { get; protected set; } = false;
         public Mode CurrentMode { get; protected set; }
 
+
         public ClimateController(
-            HvacController hvacController,
-            AnalogTemperature temperatureSensor
+            //HvacController hvacController,
+            //AnalogTemperature temperatureSensor
             )
         {
-            this._hvacController = hvacController;
-            this._tempSensor = temperatureSensor;
+            _hvacController = new HvacController(
+                ThermApp.Device.CreateDigitalOutputPort(IOMap.Heater.Item2),
+                ThermApp.Device.CreateDigitalOutputPort(IOMap.Fan.Item2),
+                ThermApp.Device.CreateDigitalOutputPort(IOMap.AirCon.Item2)
+            );
+
+            // when the climate model changes, make sure to update the HVAC
+            // state
+            ThermApp.ModelManager.Subscribe(new FilterableObserver<ClimateModelChangeResult, ClimateModel>(
+                h => {
+                    Console.WriteLine("ClimateController: Climate model changed, updating hvac.");
+                    this._desiredClimateOperation = h.New;
+                    UpdateClimateIntent();
+                }
+            ));
         }
 
-        public void SetDesiredClimate(ClimateModel model)
-        {
-            this._desiredClimate = model;
-            this.CurrentMode = model.HvacOperatingMode;
-            // if we're not already running, call running.
-            // if we are running, it'll pick up the new changes during the cycle
-            StartMaintainingClimate();
-        }
-
+        /// <summary>
+        /// Stop maintaining climate. Will shut the HVAC system down.
+        ///
+        /// TODO: this probably isn't needed. 
+        /// </summary>
         public void TurnOff()
         {
-            lock (_lock) {
+            lock (_climateMaintLock) {
                 if (!IsRunning) return;
 
-                if (SamplingTokenSource != null) {
-                    SamplingTokenSource.Cancel();
+                if (_climateMaintCancelToken != null) {
+                    _climateMaintCancelToken.Cancel();
                 }
 
                 // state muh-cheen
@@ -56,40 +72,50 @@ namespace Therm
             }
         }
 
-        // internal thread lock
-        private object _lock = new object();
-        private CancellationTokenSource SamplingTokenSource;
 
         /// <summary>
         /// Spins up a thread that checks the temp and 
         /// </summary>
-        protected void StartMaintainingClimate()
+        protected void UpdateClimateIntent()
         {
             // thread safety
-            lock (_lock) {
-                if (IsRunning) return;
+            lock (_climateMaintLock) {
+                bool skipCancel = false;
+
+                // if we're not changing the mode, and we're
+                // already running, it'll respond to the change in desired temp
+                // and ambient temp in the PID loopp.
+                if (this._desiredClimateOperation.HvacOperatingMode == this.CurrentMode) {
+                    if (IsRunning) { return; }
+                } // otherwise, if we've got an idle loop, cancel it. 
+                else {
+                    if (IsRunning) {
+                        _climateMaintCancelToken.Cancel();
+                        skipCancel = true; // we'll use this later.
+                    }
+                }
 
                 // state muh-cheen
                 IsRunning = true;
 
-                SamplingTokenSource = new CancellationTokenSource();
-                CancellationToken ct = SamplingTokenSource.Token;
+                _climateMaintCancelToken = new CancellationTokenSource();
+                CancellationToken ct = _climateMaintCancelToken.Token;
 
-                Task.Factory.StartNew(async () => {
+                Task.Factory.StartNew(async (wasRunning) => {
+                    
                     while (true) {
-                        // TODO: someone please review; is this the correct
-                        // place to do this?
-                        // check for cancel (doing this here instead of 
-                        // while(!ct.IsCancellationRequested), so we can perform 
-                        // cleanup
-                        if (ct.IsCancellationRequested) {
-                            break;
+                        // if it was runing, and we got here, we don't actually
+                        // want to honor the cancelation, because it was meant
+                        // for the last loop.
+                        if (!skipCancel && ct.IsCancellationRequested) {
+                                break;
                         }
+                        // reset so we check for cancel next time through the loop
+                        if (skipCancel) { skipCancel = false; }
 
-                        // TODO: use this in PID. temp sensor is already spinning
-                        //float temp = _tempSensor.Temperature;
 
-                        // TODO: PID and HVAC logic go here.
+                        // TODO: PID and HVAC logic go here. make sure
+                        // to check against the current climate model
 
 
                         switch (this.CurrentMode) {
@@ -112,7 +138,7 @@ namespace Therm
                         // sleep for the appropriate interval
                         await Task.Delay(_standbyDuration);
                     }
-                }, SamplingTokenSource.Token);
+                }, _climateMaintCancelToken.Token);
             }
         }
 
