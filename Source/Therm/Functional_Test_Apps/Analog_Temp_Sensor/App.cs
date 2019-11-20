@@ -17,7 +17,13 @@ namespace BasicAnalog_Temp_Sensor
         public App()
         {
             ConfigurePorts();
+
             //BeginReadingTemp();
+
+            this.ReadInitialTemp().Wait();
+
+            // start the temp sensor update loop
+            this._tmpSensor.StartUpdating();
         }
 
         public void ConfigurePorts()
@@ -36,7 +42,13 @@ namespace BasicAnalog_Temp_Sensor
                     Console.WriteLine($"Current Temp: {h.New.Temperature}ºC");
                 }/*,
                 e => { return (Math.Abs(e.Delta.Temperature) > 0.25f); }*/));
-            this._tmpSensor.StartUpdating();
+            
+        }
+
+        protected async Task ReadInitialTemp()
+        {
+            var conditions = await _tmpSensor.Read();
+            Console.WriteLine($"Temp: {conditions.Temperature}ºC, {conditions.Temperature.ToFahrenheit()}ºF.");
         }
 
         protected async Task BeginReadingTemp()
