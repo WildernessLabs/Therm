@@ -18,6 +18,8 @@ namespace Therm
         protected ST7789 _display;
         protected GraphicsLibrary _graphics;
 
+        protected bool _rendering = false;
+        protected object _renderLock = new object();
 
         public DisplayController()
         {
@@ -64,7 +66,17 @@ namespace Therm
 
         protected void Render()
         {
-//            Task.Run(() => {
+            lock (this._renderLock) {
+                // if we're already rendering, bail out.
+                if (this._rendering) {
+                    Console.WriteLine("Already in a rendering loop, bailing out.");
+                    return;
+                }
+            }
+
+            this._rendering = true;
+
+                //            Task.Run(() => {
                 //rendering tasks on BG thread
                 _graphics.Clear();
                 _graphics.CurrentFont = new Font12x16();
@@ -72,7 +84,10 @@ namespace Therm
                 _graphics.DrawText(4, 20, $"desired temp: {_climate.DesiredTemperature.ToString("###")}º", Color.FromHex("EF7D3B"));
                 _graphics.DrawText(4, 40, "all temps Canadian", Color.White);
                 _graphics.Show();
-//            });
+            //            });
+
+            this._rendering = false;
+            
         }
     }
 }
