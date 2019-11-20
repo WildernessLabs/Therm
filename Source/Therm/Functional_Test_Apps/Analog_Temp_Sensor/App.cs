@@ -4,6 +4,8 @@ using Meadow;
 using Meadow.Devices;
 using Meadow.Hardware;
 using Meadow.Foundation.Sensors.Temperature;
+using System.Threading.Tasks;
+using Meadow.Peripherals.Sensors.Atmospheric;
 
 namespace BasicAnalog_Temp_Sensor
 {
@@ -15,7 +17,7 @@ namespace BasicAnalog_Temp_Sensor
         public App()
         {
             ConfigurePorts();
-            BeginReadingTemp();
+            //BeginReadingTemp();
         }
 
         public void ConfigurePorts()
@@ -27,18 +29,23 @@ namespace BasicAnalog_Temp_Sensor
                 Device, Device.Pins.A00, AnalogTemperature.KnownSensorType.LM35
                 );
 
-
+            // subscribe to 1/4º C changes in temp
+            this._tmpSensor.Subscribe(new FilterableObserver<AtmosphericConditionChangeResult, AtmosphericConditions>(
+                h => {
+                    // probably update screen or something
+                    Console.WriteLine($"Current Temp: {h.New.Temperature}ºC");
+                }/*,
+                e => { return (Math.Abs(e.Delta.Temperature) > 0.25f); }*/));
+            this._tmpSensor.StartUpdating();
         }
 
-        protected async void BeginReadingTemp()
+        protected async Task BeginReadingTemp()
         {
             while (true) {
                 // most basic of tests: Annie are you OK, are you ok Annie?
                 //Console.WriteLine($"Analog voltage value: {await _annieInnie.Read()}");
 
-
                 var conditions = await _tmpSensor.Read();
-
                 Console.WriteLine($"Temp: {conditions.Temperature}ºC, {conditions.Temperature.ToFahrenheit()}ºF.");
                 Thread.Sleep(1000);
             }
