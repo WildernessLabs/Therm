@@ -37,6 +37,7 @@ namespace Therm
 
         private ClimateModelManager()
         {
+            Console.WriteLine("Instantiating ClimateModelManager");
         }
 
         /// <summary>

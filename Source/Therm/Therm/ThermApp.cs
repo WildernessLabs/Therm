@@ -39,7 +39,6 @@ namespace Therm
             _tempSensor = new AnalogTemperature(
                 IOMap.AnalogTempSensor.Item1, IOMap.AnalogTempSensor.Item2,
                 AnalogTemperature.KnownSensorType.TMP35);
-
         }
 
         protected void InitializeControllers()
@@ -58,7 +57,7 @@ namespace Therm
             this._tempSensor.Subscribe(new FilterableObserver<AtmosphericConditionChangeResult, AtmosphericConditions>(
                 h => {
                     // probably update screen or something
-                    Console.WriteLine($"Current Temp: {h.New.Temperature}ºC");
+                    Console.WriteLine($"Current Temperature: {h.New.Temperature}ºC");
                     ModelManager.UpdateAmbientTemp(h.New.Temperature);
                 },
                 e => { return (Math.Abs(e.Delta.Temperature) > 0.25f); }));
@@ -73,10 +72,10 @@ namespace Therm
         {
             // take an initial reading of the temp
             Console.WriteLine("Start");
-            //var conditions = await _tempSensor.Read();
-            //Console.WriteLine($"Initial temp: {conditions.Temperature}");
-            //ModelManager.UpdateAmbientTemp(conditions.Temperature);
-            ModelManager.UpdateAmbientTemp(20f);
+            var conditions = await _tempSensor.Read();
+            Console.WriteLine($"Initial temp: {conditions.Temperature}");
+            ModelManager.UpdateAmbientTemp(conditions.Temperature);
+            //ModelManager.UpdateAmbientTemp(20f);
 
             //
             Console.WriteLine("Starting up the temp sensor.");
