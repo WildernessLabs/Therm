@@ -57,7 +57,7 @@ namespace Therm
             this._tempSensor.Subscribe(new FilterableObserver<AtmosphericConditionChangeResult, AtmosphericConditions>(
                 h => {
                     // probably update screen or something
-                    Console.WriteLine($"Current Temperature: {h.New.Temperature}ºC");
+                    Console.WriteLine($"Update from temp sensor: {h.New.Temperature}ºC");
                     ModelManager.UpdateAmbientTemp(h.New.Temperature);
                 },
                 e => { return (Math.Abs(e.Delta.Temperature) > 0.25f); }));
@@ -73,7 +73,14 @@ namespace Therm
             // take an initial reading of the temp
             Console.WriteLine("Start");
             var conditions = await _tempSensor.Read();
+
+            // what's weird here is that the screen will update before i see
+            // the output of this in the meadow window.
+            // not sure why. we're 'wait()ing' this `Start` method, but that
+            // shouldn't prevent this writeline from occuring
             Console.WriteLine($"Initial temp: {conditions.Temperature}");
+
+            // it's more reliable if we actually just set a literal here.
             ModelManager.UpdateAmbientTemp(conditions.Temperature);
             //ModelManager.UpdateAmbientTemp(20f);
 
