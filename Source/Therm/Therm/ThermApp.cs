@@ -72,6 +72,7 @@ namespace Therm
         {
             // take an initial reading of the temp
             Console.WriteLine("Start");
+            // BUGBUG: this doesn't seem to be returning
             var conditions = await _tempSensor.Read();
 
             // what's weird here is that the screen will update before i see
