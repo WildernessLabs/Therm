@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Threading;
 using Meadow;
 using Meadow.Devices;
 using Meadow.Foundation;
@@ -12,7 +11,7 @@ namespace HackKitDisplay
     public class HackKitDisplay : App<F7Micro, HackKitDisplay>
     {
         protected ISpiBus _spiBus;
-        protected ST7789 _display;
+        protected St7789 _display;
         GraphicsLibrary _graphics;
 
         public HackKitDisplay()
@@ -20,7 +19,7 @@ namespace HackKitDisplay
             var config = new SpiClockConfiguration(6000, SpiClockConfiguration.Mode.Mode3);
             _spiBus = Device.CreateSpiBus(Device.Pins.SCK, Device.Pins.MOSI, Device.Pins.MISO, config);
 
-            _display = new ST7789(
+            _display = new St7789(
                 device: Device,
                 spiBus: _spiBus,
                 chipSelectPin: null,
@@ -31,7 +30,7 @@ namespace HackKitDisplay
             _graphics = new GraphicsLibrary(_display);
 
             // my display is upside down"s
-            _graphics.CurrentRotation = GraphicsLibrary.Rotation._180Degrees;
+            _graphics.Rotation = GraphicsLibrary.RotationType._180Degrees;
 
             Console.WriteLine("Clear display");
             //_display.ClearScreen(250);
@@ -56,6 +55,5 @@ namespace HackKitDisplay
             //_display.Show();
             //Console.WriteLine("shown.");
         }
-
     }
 }

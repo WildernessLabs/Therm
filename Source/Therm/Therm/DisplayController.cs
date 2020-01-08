@@ -27,7 +27,7 @@ namespace Therm
 
         // internals
         protected ISpiBus _spiBus;
-        protected ST7789 _display;
+        protected St7789 _display;
         protected GraphicsLibrary _graphics;
 
         // rending state and lock
@@ -58,7 +58,7 @@ namespace Therm
                 spiConfig);
 
             // new up the actual display on the SPI bus
-            _display = new ST7789(
+            _display = new St7789(
                 device: ThermApp.Device,
                 spiBus: _spiBus,
                 chipSelectPin: null,
@@ -71,7 +71,7 @@ namespace Therm
             _graphics = new GraphicsLibrary(_display);
 
             // my display is upside down
-            _graphics.CurrentRotation = GraphicsLibrary.Rotation._180Degrees;
+            _graphics.Rotation = GraphicsLibrary.RotationType._180Degrees;
 
             Console.WriteLine("Clear display");
 
