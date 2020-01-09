@@ -22,22 +22,22 @@ namespace Therm
         public ThermApp()
         {
             // setup our global hardware
-            this.ConfigurePeripherals();
+            ConfigurePeripherals();
 
             // init our controllers
-            this.InitializeControllers();
+            InitializeControllers();
 
             // wire things up
-            this.WireUpEventing();
+            WireUpEventing();
 
             // get things spun up
-            this.Start().Wait();
+            Start().Wait();
         }
 
         protected void ConfigurePeripherals()
         {
             _tempSensor = new AnalogTemperature(
-                IOMap.AnalogTempSensor.Item1, IOMap.AnalogTempSensor.Item2,
+                IOMap.AnalogTempSensor.Device, IOMap.AnalogTempSensor.Pin,
                 AnalogTemperature.KnownSensorType.TMP35);
         }
 
@@ -47,14 +47,13 @@ namespace Therm
             _uxController = new UXController();
         }
 
-
         /// <summary>
         /// Glues things together with the subscribers
         /// </summary>
         protected void WireUpEventing()
         {
             // subscribe to 1/4º C changes in temp
-            this._tempSensor.Subscribe(new FilterableObserver<AtmosphericConditionChangeResult, AtmosphericConditions>(
+            _tempSensor.Subscribe(new FilterableObserver<AtmosphericConditionChangeResult, AtmosphericConditions>(
                 h => {
                     // probably update screen or something
                     Console.WriteLine($"Update from temp sensor: {h.New.Temperature}ºC");

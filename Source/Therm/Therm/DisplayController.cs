@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Threading.Tasks;
 using Meadow.Foundation;
 using Meadow.Foundation.Displays.Tft;
 using Meadow.Foundation.Graphics;
@@ -26,12 +25,11 @@ namespace Therm
         protected ClimateModel _climate;
 
         // internals
-        protected ISpiBus _spiBus;
         protected St7789 _display;
         protected GraphicsLibrary _graphics;
 
         // rending state and lock
-        protected bool _rendering = false;
+        protected bool _isRendering = false;
         protected object _renderLock = new object();
 
         public DisplayController()
@@ -51,32 +49,35 @@ namespace Therm
                 SpiClockConfiguration.Mode.Mode3);
 
             // initialize our SPI bus, with that config
-            _spiBus = ThermApp.Device.CreateSpiBus(
-                IOMap.DisplaySpiClock.Item2,
-                IOMap.DisplayMosi.Item2,
-                IOMap.DisplayMiso.Item2,
+            var spiBus = ThermApp.Device.CreateSpiBus(
+                IOMap.DisplaySpiClock.Pin,
+                IOMap.DisplayMosi.Pin,
+                IOMap.DisplayMiso.Pin,
                 spiConfig);
 
             // new up the actual display on the SPI bus
             _display = new St7789(
                 device: ThermApp.Device,
-                spiBus: _spiBus,
+                spiBus: spiBus,
                 chipSelectPin: null,
-                dcPin: IOMap.DisplayDCPin.Item2,
-                resetPin: IOMap.DisplayResetPin.Item2,
+                dcPin: IOMap.DisplayDCPin.Pin,
+                resetPin: IOMap.DisplayResetPin.Pin,
                 width: 240, height: 240);
 
             // create our graphics surface that we'll draw onto and then blit
             // to the display with.
-            _graphics = new GraphicsLibrary(_display);
-
-            // my display is upside down
-            _graphics.Rotation = GraphicsLibrary.RotationType._180Degrees;
+            _graphics = new GraphicsLibrary(_display)
+            {   // my display is upside down
+                // Rotation = GraphicsLibrary.RotationType._180Degrees,
+                CurrentFont = new Font12x20(),
+            };
 
             Console.WriteLine("Clear display");
 
             // finally, clear the display so it's ready for action
             _graphics.Clear(true);
+
+            Render();
         }
 
         /// <summary>
@@ -87,9 +88,9 @@ namespace Therm
         /// screen.</param>
         public void UpdateClimate(ClimateModel model)
         {
-            this._climate = model;
+            _climate = model;
             // update the screen
-            this.Render();
+            Render();
         }
 
         /// <summary>
@@ -98,27 +99,40 @@ namespace Therm
         /// </summary>
         protected void Render()
         {
-            lock (this._renderLock) {
-                // if we're already rendering, bail out.
-                if (this._rendering) {
+            Console.WriteLine($"Render() - is rendering: {_isRendering}");
+
+            lock (_renderLock)
+            {   // if we're already rendering, bail out.
+                if (_isRendering)
+                {
                     Console.WriteLine("Already in a rendering loop, bailing out.");
                     return;
                 }
 
-                this._rendering = true;
+                _isRendering = true;
             }
 
             //            Task.Run(() => {
             //rendering tasks on BG thread
+            Console.WriteLine("Clear");
+
             _graphics.Clear();
-                _graphics.CurrentFont = new Font12x16();
-                _graphics.DrawText(4, 4, $"current temp: {_climate.CurrentConditions.Temperature.ToString("###")}º", Color.FromHex("24abe3"));
-                _graphics.DrawText(4, 20, $"desired temp: {_climate.DesiredTemperature.ToString("###")}º", Color.FromHex("EF7D3B"));
-                _graphics.DrawText(4, 40, "all temps Canadian", Color.White);
-                _graphics.Show();
+
+            Console.WriteLine("DrawText");
+            if(_climate != null && _climate.CurrentConditions != null)
+            {
+                _graphics.DrawText(4, 4, $"current temp: {_climate.CurrentConditions.Temperature.ToString("###")}°", Color.FromHex("24abe3"));
+                _graphics.DrawText(4, 20, $"desired temp: {_climate.DesiredTemperature.ToString("###")}°", Color.FromHex("EF7D3B"));
+
+            }
+            _graphics.DrawText(4, 40, "all temps Canadian", Color.White);
+            Console.WriteLine("Show");
+            _graphics.Show();
             //            });
 
-            this._rendering = false;
+            Console.WriteLine("Show complete");
+
+            _isRendering = false;
             
         }
     }

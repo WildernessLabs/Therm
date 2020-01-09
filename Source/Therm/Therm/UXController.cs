@@ -1,7 +1,6 @@
 ﻿using System;
 using Meadow;
 using Meadow.Foundation.Sensors.Buttons;
-using Meadow.Hardware;
 using Meadow.Peripherals.Sensors.Buttons;
 
 namespace Therm
@@ -20,8 +19,8 @@ namespace Therm
 
         public UXController()
         {
-            this.InitControllers();
-            this.InitializePeripherals();
+            InitControllers();
+            InitializePeripherals();
         }
 
         protected void InitControllers()
@@ -38,7 +37,7 @@ namespace Therm
             ThermApp.ModelManager.Subscribe(new FilterableObserver<ClimateModelChangeResult, ClimateModel>(
                 h => {
                     Console.WriteLine("UXController: Climate model changed, updating display.");
-                    this._displayController.UpdateClimate(ThermApp.ModelManager.Climate);
+                    _displayController.UpdateClimate(ThermApp.ModelManager.Climate);
                 }
             ));
 
@@ -49,26 +48,29 @@ namespace Therm
         {
             Console.WriteLine("UXController.InitializePeripherals");
 
-            _upButton = new PushButton(IOMap.UpButton.Item1, IOMap.UpButton.Item2);
-            _downButton = new PushButton(IOMap.DownButton.Item1, IOMap.DownButton.Item2);
-            _modeButton = new PushButton(IOMap.ModeButton.Item1, IOMap.ModeButton.Item2);
+            _upButton = new PushButton(IOMap.UpButton.Device, IOMap.UpButton.Pin);
+            _downButton = new PushButton(IOMap.DownButton.Device, IOMap.DownButton.Pin);
+            _modeButton = new PushButton(IOMap.ModeButton.Device, IOMap.ModeButton.Pin);
 
             _upButton.Clicked += (s,e) => {
                 // TODO: do some checks here:
                 //if(this._climateModel.DesiredTemperature + 1 < someMax) {
+                Console.WriteLine("Up button");
                 ClimateModel newClimate = ClimateModel.From(ThermApp.ModelManager.Climate);
                 newClimate.DesiredTemperature++;
                 ThermApp.ModelManager.UpdateDesiredClimate(newClimate);
             };
 
-            _upButton.Clicked += (s,e) => {
-                //if(this._climateModel.DesiredTemperature - 1 > someMin) {                
+            _downButton.Clicked += (s,e) => {
+                //if(this._climateModel.DesiredTemperature - 1 > someMin) {
+                Console.WriteLine("Down button");
                 ClimateModel newClimate = ClimateModel.From(ThermApp.ModelManager.Climate);
                 newClimate.DesiredTemperature--;
                 ThermApp.ModelManager.UpdateDesiredClimate(newClimate);
             };
 
             _modeButton.Clicked += (s, e) => {
+                Console.WriteLine("Mode button");
                 ClimateModel newClimate = ClimateModel.From(ThermApp.ModelManager.Climate);
                 // cycle to the next mode
                 switch (newClimate.HvacOperatingMode) {

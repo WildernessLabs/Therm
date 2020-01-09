@@ -17,7 +17,7 @@ namespace Therm
         // internals
         protected HvacController _hvacController;
         //protected AnalogTemperature _tempSensor;
-        protected int _standbyDuration = 30000; // 30 second on/off intervals
+        protected int _standbyDuration = 4000; // 30 second on/off intervals (4 for testing)
         protected ClimateModel _desiredClimateOperation;
 
         // internal thread lock
@@ -35,9 +35,9 @@ namespace Therm
             )
         {
             _hvacController = new HvacController(
-                ThermApp.Device.CreateDigitalOutputPort(IOMap.Heater.Item2),
-                ThermApp.Device.CreateDigitalOutputPort(IOMap.Fan.Item2),
-                ThermApp.Device.CreateDigitalOutputPort(IOMap.AirCon.Item2)
+                ThermApp.Device.CreateDigitalOutputPort(IOMap.Heater.Pin),
+                ThermApp.Device.CreateDigitalOutputPort(IOMap.Fan.Pin),
+                ThermApp.Device.CreateDigitalOutputPort(IOMap.AirCon.Pin)
             );
 
             // when the climate model changes, make sure to update the HVAC
@@ -45,7 +45,7 @@ namespace Therm
             ThermApp.ModelManager.Subscribe(new FilterableObserver<ClimateModelChangeResult, ClimateModel>(
                 h => {
                     Console.WriteLine("ClimateController: Climate model changed, updating hvac.");
-                    this._desiredClimateOperation = h.New;
+                    _desiredClimateOperation = h.New;
                     UpdateClimateIntent();
                 }
             ));
@@ -67,8 +67,8 @@ namespace Therm
 
                 // state muh-cheen
                 IsRunning = false;
-                this.CurrentMode = Mode.Off;
-                this._hvacController.TurnAllOff();
+                CurrentMode = Mode.Off;
+                _hvacController.TurnAllOff();
             }
         }
 
@@ -85,7 +85,7 @@ namespace Therm
                 // if we're not changing the mode, and we're
                 // already running, it'll respond to the change in desired temp
                 // and ambient temp in the PID loopp.
-                if (this._desiredClimateOperation.HvacOperatingMode == this.CurrentMode) {
+                if (_desiredClimateOperation.HvacOperatingMode == this.CurrentMode) {
                     if (IsRunning) { return; }
                 } // otherwise, if we've got an idle loop, cancel it. 
                 else {
@@ -118,7 +118,7 @@ namespace Therm
                         // to check against the current climate model
 
 
-                        switch (this.CurrentMode) {
+                        switch (CurrentMode) {
                             case Mode.Auto:
                                 break;
                             case Mode.Cool:
