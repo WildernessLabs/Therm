@@ -1,13 +1,16 @@
-
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29613.14
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Functional_Test_Apps", "Functional_Test_Apps", "{23A9D1FA-8F8D-439A-8FB8-EF458CC7C873}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Analog_Temp_Sensor", "Functional_Test_Apps\Analog_Temp_Sensor\Analog_Temp_Sensor.csproj", "{9027EA7A-272B-421D-B20E-626E657C0A69}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Analog_Temp_Sensor", "Functional_Test_Apps\Analog_Temp_Sensor\Analog_Temp_Sensor.csproj", "{9027EA7A-272B-421D-B20E-626E657C0A69}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Therm", "Therm\Therm.csproj", "{F0B3E698-C1A3-4CD5-B043-1E965454CC25}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Therm", "Therm\Therm.csproj", "{F0B3E698-C1A3-4CD5-B043-1E965454CC25}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HackKitDisplay", "Functional_Test_Apps\HackKitDisplay\HackKitDisplay.csproj", "{F91B0767-E873-42B2-A951-FD91BA03006E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HackKitDisplay", "Functional_Test_Apps\HackKitDisplay\HackKitDisplay.csproj", "{F91B0767-E873-42B2-A951-FD91BA03006E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThermUX", "ThermUX\ThermUX.csproj", "{E60C9FF1-0298-4308-B8E9-2259468374F1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,9 +30,21 @@ Global
 		{F91B0767-E873-42B2-A951-FD91BA03006E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F91B0767-E873-42B2-A951-FD91BA03006E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F91B0767-E873-42B2-A951-FD91BA03006E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E60C9FF1-0298-4308-B8E9-2259468374F1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E60C9FF1-0298-4308-B8E9-2259468374F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E60C9FF1-0298-4308-B8E9-2259468374F1}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{E60C9FF1-0298-4308-B8E9-2259468374F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E60C9FF1-0298-4308-B8E9-2259468374F1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E60C9FF1-0298-4308-B8E9-2259468374F1}.Release|Any CPU.Deploy.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{9027EA7A-272B-421D-B20E-626E657C0A69} = {23A9D1FA-8F8D-439A-8FB8-EF458CC7C873}
 		{F91B0767-E873-42B2-A951-FD91BA03006E} = {23A9D1FA-8F8D-439A-8FB8-EF458CC7C873}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {3E65A8A6-9067-4100-BDB0-776EF55F2E7C}
 	EndGlobalSection
 EndGlobal
