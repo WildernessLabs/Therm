@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Threading;
 using Meadow;
 using Meadow.Devices;
-using Meadow.Hardware;
-using Meadow.Peripherals.Sensors.Temperature;
 using Meadow.Foundation.Sensors.Temperature;
 using Meadow.Peripherals.Sensors.Atmospheric;
 using System.Threading.Tasks;
@@ -31,7 +28,7 @@ namespace Therm
             WireUpEventing();
 
             // get things spun up
-            Start().Wait();
+            var t = Start(); //no need to block here .... 
         }
 
         protected void ConfigurePeripherals()

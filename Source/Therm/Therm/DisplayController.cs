@@ -50,9 +50,9 @@ namespace Therm
 
             // initialize our SPI bus, with that config
             var spiBus = ThermApp.Device.CreateSpiBus(
-                IOMap.DisplaySpiClock.Pin,
-                IOMap.DisplayMosi.Pin,
-                IOMap.DisplayMiso.Pin,
+                IOMap.Display.ClockPin,
+                IOMap.Display.MosiPin,
+                null,
                 spiConfig);
 
             // new up the actual display on the SPI bus
@@ -60,8 +60,8 @@ namespace Therm
                 device: ThermApp.Device,
                 spiBus: spiBus,
                 chipSelectPin: null,
-                dcPin: IOMap.DisplayDCPin.Pin,
-                resetPin: IOMap.DisplayResetPin.Pin,
+                dcPin: IOMap.Display.DCPin,
+                resetPin: IOMap.Display.ResetPin,
                 width: 240, height: 240);
 
             // create our graphics surface that we'll draw onto and then blit
