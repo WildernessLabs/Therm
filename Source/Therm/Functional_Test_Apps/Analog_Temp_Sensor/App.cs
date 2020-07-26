@@ -36,7 +36,7 @@ namespace BasicAnalog_Temp_Sensor
                 );
 
             // subscribe to 1/4º C changes in temp
-            this._tmpSensor.Subscribe(new FilterableObserver<AtmosphericConditionChangeResult, AtmosphericConditions>(
+            this._tmpSensor.Subscribe(new FilterableChangeObserver<AtmosphericConditionChangeResult, AtmosphericConditions>(
                 h => {
                     // probably update screen or something
                     Console.WriteLine($"Current Temp: {h.New.Temperature}ºC");
@@ -48,7 +48,7 @@ namespace BasicAnalog_Temp_Sensor
         protected async Task ReadInitialTemp()
         {
             var conditions = await _tmpSensor.Read();
-            Console.WriteLine($"Temp: {conditions.Temperature}ºC, {conditions.Temperature.ToFahrenheit()}ºF.");
+            Console.WriteLine($"Temp: {conditions.Temperature}ºC, {conditions.Temperature.Value.ToFahrenheit()}ºF.");
         }
 
         protected async Task BeginReadingTemp()
@@ -58,7 +58,7 @@ namespace BasicAnalog_Temp_Sensor
                 //Console.WriteLine($"Analog voltage value: {await _annieInnie.Read()}");
 
                 var conditions = await _tmpSensor.Read();
-                Console.WriteLine($"Temp: {conditions.Temperature}ºC, {conditions.Temperature.ToFahrenheit()}ºF.");
+                Console.WriteLine($"Temp: {conditions.Temperature.Value}ºC, {conditions.Temperature.Value.ToFahrenheit()}ºF.");
                 Thread.Sleep(1000);
             }
         }
