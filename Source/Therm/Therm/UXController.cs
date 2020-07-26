@@ -34,7 +34,7 @@ namespace Therm
             };
 
             // when the climate model changes, make sure to update the UX
-            ThermApp.ModelManager.Subscribe(new FilterableObserver<ClimateModelChangeResult, ClimateModel>(
+            ThermApp.ModelManager.Subscribe(new FilterableChangeObserver<ClimateModelChangeResult, ClimateModel>(
                 h => {
                     Console.WriteLine("UXController: Climate model changed, updating display.");
                     _displayController.UpdateClimate(ThermApp.ModelManager.Climate);

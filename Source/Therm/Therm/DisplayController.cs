@@ -43,10 +43,18 @@ namespace Therm
         /// </summary>
         protected void InitializeDisplay()
         {
+            Console.WriteLine("1");
+
             // our display needs mode3
             var spiConfig = new SpiClockConfiguration(
                 6000,
                 SpiClockConfiguration.Mode.Mode3);
+
+            Console.WriteLine("2");
+
+            if (ThermApp.Device == null)
+                Console.WriteLine("null");
+
 
             // initialize our SPI bus, with that config
             var spiBus = ThermApp.Device.CreateSpiBus(
@@ -54,6 +62,8 @@ namespace Therm
                 IOMap.Display.MosiPin,
                 null,
                 spiConfig);
+
+            Console.WriteLine("3");
 
             // new up the actual display on the SPI bus
             _display = new St7789(
@@ -121,7 +131,7 @@ namespace Therm
             Console.WriteLine("DrawText");
             if(_climate != null && _climate.CurrentConditions != null)
             {
-                _graphics.DrawText(4, 4, $"current temp: {_climate.CurrentConditions.Temperature.ToString("###")}°", Color.FromHex("24abe3"));
+                _graphics.DrawText(4, 4, $"current temp: {_climate.CurrentConditions.Temperature.Value.ToString("###")}°", Color.FromHex("24abe3"));
                 _graphics.DrawText(4, 20, $"desired temp: {_climate.DesiredTemperature.ToString("###")}°", Color.FromHex("EF7D3B"));
 
             }

@@ -13,7 +13,7 @@ namespace Therm
                         IPin ResetPin) Display = (
             ThermApp.Device,
             ThermApp.Device.Pins.SCK,
-            ThermApp.Device.Pins.MISO,
+            ThermApp.Device.Pins.MOSI,
             ThermApp.Device.Pins.D01,
             ThermApp.Device.Pins.D00);
 

@@ -42,7 +42,7 @@ namespace Therm
 
             // when the climate model changes, make sure to update the HVAC
             // state
-            ThermApp.ModelManager.Subscribe(new FilterableObserver<ClimateModelChangeResult, ClimateModel>(
+            ThermApp.ModelManager.Subscribe(new FilterableChangeObserver<ClimateModelChangeResult, ClimateModel>(
                 h => {
                     Console.WriteLine("ClimateController: Climate model changed, updating hvac.");
                     _desiredClimateOperation = h.New;
