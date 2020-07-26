@@ -35,9 +35,9 @@ namespace Therm
             )
         {
             _hvacController = new HvacController(
-                ThermApp.Device.CreateDigitalOutputPort(IOMap.HVac.HeaterPin),
-                ThermApp.Device.CreateDigitalOutputPort(IOMap.HVac.FanPin),
-                ThermApp.Device.CreateDigitalOutputPort(IOMap.HVac.AirConPin)
+                ThermApp.Device.CreateDigitalOutputPort(IODeviceMap.HVac.HeaterPin),
+                ThermApp.Device.CreateDigitalOutputPort(IODeviceMap.HVac.FanPin),
+                ThermApp.Device.CreateDigitalOutputPort(IODeviceMap.HVac.AirConPin)
             );
 
             // when the climate model changes, make sure to update the HVAC

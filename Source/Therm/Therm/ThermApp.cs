@@ -58,8 +58,8 @@ namespace Therm
         protected void IntializeTemperatureSensor()
         {
             temperatureSensor = new AnalogTemperature(
-                IOMap.AnalogTempSensor.Device, 
-                IOMap.AnalogTempSensor.Pin,
+                IODeviceMap.AnalogTempSensor.Device, 
+                IODeviceMap.AnalogTempSensor.Pin,
                 AnalogTemperature.KnownSensorType.TMP35);
         }
 

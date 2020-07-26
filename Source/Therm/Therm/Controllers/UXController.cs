@@ -48,9 +48,9 @@ namespace Therm
         {
             Console.WriteLine("UXController.InitializePeripherals");
 
-            upButton = new PushButton(IOMap.Buttons.Device, IOMap.Buttons.UpPin);
-            downButton = new PushButton(IOMap.Buttons.Device, IOMap.Buttons.DownPin);
-            modeButton = new PushButton(IOMap.Buttons.Device, IOMap.Buttons.ModePin);
+            upButton = new PushButton(IODeviceMap.Buttons.Device, IODeviceMap.Buttons.UpPin);
+            downButton = new PushButton(IODeviceMap.Buttons.Device, IODeviceMap.Buttons.DownPin);
+            modeButton = new PushButton(IODeviceMap.Buttons.Device, IODeviceMap.Buttons.ModePin);
 
             upButton.Clicked += (s,e) => {
                 // TODO: do some checks here:

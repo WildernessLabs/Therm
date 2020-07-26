@@ -1,9 +1,8 @@
-﻿using System;
-using Meadow.Hardware;
+﻿using Meadow.Hardware;
 
 namespace Therm
 {
-    public static class IOMap
+    public static class IODeviceMap
     {
         // Display
         public static (IIODevice IODevice,
@@ -43,7 +42,7 @@ namespace Therm
             ThermApp.Device.Pins.D04,
             ThermApp.Device.Pins.D05);
 
-        static IOMap()
+        static IODeviceMap()
         {
         }
     }
