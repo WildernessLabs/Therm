@@ -2,7 +2,6 @@
 using System.Threading;
 using Meadow;
 using Meadow.Devices;
-using Meadow.Hardware;
 using Meadow.Foundation.Sensors.Temperature;
 using System.Threading.Tasks;
 using Meadow.Peripherals.Sensors.Atmospheric;
@@ -11,8 +10,7 @@ namespace BasicAnalog_Temp_Sensor
 {
     public class App : App<F7Micro, App>
     {
-        AnalogTemperature _tmpSensor;
-        //IAnalogInputPort _annieInnie;
+        AnalogTemperature temperatureSensor;
 
         public App()
         {
@@ -20,35 +18,31 @@ namespace BasicAnalog_Temp_Sensor
 
             //BeginReadingTemp();
 
-            this.ReadInitialTemp().Wait();
+            ReadInitialTemperature().Wait();
 
             // start the temp sensor update loop
-            this._tmpSensor.StartUpdating();
+            temperatureSensor.StartUpdating();
         }
 
         public void ConfigurePorts()
         {
-
-            //_annieInnie = Device.CreateAnalogInputPort(Device.Pins.A00);
-
-            _tmpSensor = new AnalogTemperature(
+            temperatureSensor = new AnalogTemperature(
                 Device, Device.Pins.A00, AnalogTemperature.KnownSensorType.LM35
                 );
 
             // subscribe to 1/4º C changes in temp
-            this._tmpSensor.Subscribe(new FilterableChangeObserver<AtmosphericConditionChangeResult, AtmosphericConditions>(
+            temperatureSensor.Subscribe(new FilterableChangeObserver<AtmosphericConditionChangeResult, AtmosphericConditions>(
                 h => {
                     // probably update screen or something
                     Console.WriteLine($"Current Temp: {h.New.Temperature}ºC");
                 }/*,
                 e => { return (Math.Abs(e.Delta.Temperature) > 0.25f); }*/));
-            
         }
 
-        protected async Task ReadInitialTemp()
+        protected async Task ReadInitialTemperature()
         {
-            var conditions = await _tmpSensor.Read();
-            Console.WriteLine($"Temp: {conditions.Temperature}ºC, {conditions.Temperature.Value.ToFahrenheit()}ºF.");
+            var conditions = await temperatureSensor.Read();
+            Console.WriteLine($"Temp: {conditions.Temperature}ºC, {conditions.Temperature.Value.CelciusToFahrenheit()}ºF.");
         }
 
         protected async Task BeginReadingTemp()
@@ -56,17 +50,16 @@ namespace BasicAnalog_Temp_Sensor
             while (true) {
                 // most basic of tests: Annie are you OK, are you ok Annie?
                 //Console.WriteLine($"Analog voltage value: {await _annieInnie.Read()}");
-
-                var conditions = await _tmpSensor.Read();
-                Console.WriteLine($"Temp: {conditions.Temperature.Value}ºC, {conditions.Temperature.Value.ToFahrenheit()}ºF.");
+                var conditions = await temperatureSensor.Read();
+                Console.WriteLine($"Temp: {conditions.Temperature.Value}ºC, {conditions.Temperature.Value.CelciusToFahrenheit()}ºF.");
                 Thread.Sleep(1000);
             }
         }
-
     }
-    public static class TempExtension
+
+    public static class TemperatureExtension
     {
-        public static float ToFahrenheit(this float from)
+        public static float CelciusToFahrenheit(this float from)
         {
             return (from * 9) / 5 + 32;
         }

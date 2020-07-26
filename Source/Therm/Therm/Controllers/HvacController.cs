@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.Remoting.Messaging;
 using Meadow.Hardware;
 
 namespace Therm
@@ -9,101 +10,19 @@ namespace Therm
     /// </summary>
     public class HvacController
     {
-        public event EventHandler<HvacStatusResult> StatusChanged = delegate { };
+        public event EventHandler<HvacStatusResult> StatusChanged;
 
-        protected IDigitalOutputPort _heater;
-        protected IDigitalOutputPort _airCon;
-        protected IDigitalOutputPort _fan;
+        protected IDigitalOutputPort heater;
+        protected IDigitalOutputPort airConditioner;
+        protected IDigitalOutputPort fan;
 
-        public bool FanIsOn {
-            get { return _fan.State; }
-        }
+        public bool FanIsOn => fan.State;
 
-        public bool AirConIsOn {
-            get { return _airCon.State; }
-        }
+        public bool AirConditionerIsOn => airConditioner.State;
 
-        public bool HeaterIsOn {
-            get { return _heater.State; }
-        }
+        public bool HeaterIsOn => heater.State;
 
-        public OperatingMode CurrentOperatingMode {
-            get; protected set;
-        } = OperatingMode.Off;
-
-
-        public HvacController(
-            IDigitalOutputPort heater,
-            IDigitalOutputPort airCon,
-            IDigitalOutputPort fan
-            )
-        {
-            this._heater = heater;
-            this._airCon = airCon;
-            this._fan = fan;
-
-            // start with everything off
-            this._heater.State = false;
-            this._airCon.State = false;
-            this._fan.State = false;
-        }
-
-        public void TurnHeatOn()
-        {
-            if (AirConIsOn) { _airCon.State = false; }
-
-            _heater.State = true;
-            _fan.State = true;
-
-            CurrentOperatingMode = OperatingMode.Heating;
-            this.RaiseStatusEventAndNotify();
-        }
-
-        public void TurnHeatOff()
-        {
-            _heater.State = false;
-            CurrentOperatingMode = FanIsOn ? OperatingMode.FanOnly : OperatingMode.Off;
-            this.RaiseStatusEventAndNotify();
-        }
-
-        public void TurnAirConOn()
-        {
-            if (HeaterIsOn) { _heater.State = false; }
-
-            _airCon.State = true;
-            _fan.State = true;
-
-            CurrentOperatingMode = OperatingMode.Cooling;
-            this.RaiseStatusEventAndNotify();
-        }
-
-        public void TurnAirConOff()
-        {
-            _airCon.State = false;
-            CurrentOperatingMode = FanIsOn ? OperatingMode.FanOnly : OperatingMode.Off;
-            this.RaiseStatusEventAndNotify();
-        }
-
-        public void TurnFanOn()
-        {
-            _fan.State = true;
-            CurrentOperatingMode = OperatingMode.FanOnly;
-            this.RaiseStatusEventAndNotify();
-        }
-
-        public void TurnFanOff()
-        {
-            // have to also turn off heating and cooling if no fan
-            this.TurnAllOff();
-        }
-
-        public void TurnAllOff()
-        {
-            _heater.State = false;
-            _airCon.State = false;
-            _fan.State = false;
-            CurrentOperatingMode = OperatingMode.Off;
-        }
+        public OperatingMode CurrentOperatingMode { get; protected set; } = OperatingMode.Off;
 
         public enum OperatingMode
         {
@@ -113,6 +32,79 @@ namespace Therm
             FanOnly
         }
 
+        public HvacController(
+            IDigitalOutputPort heater,
+            IDigitalOutputPort airConditioner,
+            IDigitalOutputPort fan
+            )
+        {
+            this.heater = heater;
+            this.airConditioner = airConditioner;
+            this.fan = fan;
+
+            // start with everything off
+            heater.State = false;
+            airConditioner.State = false;
+            fan.State = false;
+        }
+
+        public void TurnHeatOn()
+        {
+            if (AirConditionerIsOn) { airConditioner.State = false; }
+
+            heater.State = true;
+            fan.State = true;
+
+            CurrentOperatingMode = OperatingMode.Heating;
+            RaiseStatusEventAndNotify();
+        }
+
+        public void TurnHeatOff()
+        {
+            heater.State = false;
+            CurrentOperatingMode = FanIsOn ? OperatingMode.FanOnly : OperatingMode.Off;
+            RaiseStatusEventAndNotify();
+        }
+
+        public void TurnAirConditionerOn()
+        {
+            if (HeaterIsOn) { heater.State = false; }
+
+            airConditioner.State = true;
+            fan.State = true;
+
+            CurrentOperatingMode = OperatingMode.Cooling;
+            RaiseStatusEventAndNotify();
+        }
+
+        public void TurnAirConOff()
+        {
+            airConditioner.State = false;
+            CurrentOperatingMode = FanIsOn ? OperatingMode.FanOnly : OperatingMode.Off;
+            RaiseStatusEventAndNotify();
+        }
+
+        public void TurnFanOn()
+        {
+            fan.State = true;
+            CurrentOperatingMode = OperatingMode.FanOnly;
+            RaiseStatusEventAndNotify();
+        }
+
+        public void TurnFanOff()
+        {
+            // have to also turn off heating and cooling if no fan
+            TurnAllOff();
+        }
+
+        public void TurnAllOff()
+        {
+            heater.State = false;
+            airConditioner.State = false;
+            fan.State = false;
+            CurrentOperatingMode = OperatingMode.Off;
+        }
+
         protected void RaiseStatusEventAndNotify()
         {
             StatusChanged?.Invoke(this, new HvacStatusResult(this.CurrentOperatingMode));
@@ -120,7 +112,7 @@ namespace Therm
 
         public class HvacStatusResult
         {
-            HvacController.OperatingMode NewMode { get; set; }
+            OperatingMode NewMode { get; set; }
 
             public HvacStatusResult(OperatingMode newMode)
             {

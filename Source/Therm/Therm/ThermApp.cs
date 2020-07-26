@@ -9,10 +9,10 @@ namespace Therm
 {
     public class ThermApp : App<F7Micro, ThermApp>
     {
-        AnalogTemperature _tempSensor;
-        ClimateController _climateController;
-        HvacController _hvacController;
-        UXController _uxController;
+        AnalogTemperature temperatureSensor;
+        ClimateController climateController;
+        HvacController hvacController;
+        UXController uxController;
 
         public static ClimateModelManager ModelManager { get => ClimateModelManager.Instance; }
 
@@ -21,8 +21,8 @@ namespace Therm
             // setup our global hardware
             ConfigurePeripherals();
 
-            // init our controllers
-            InitializeControllers();
+            climateController = new ClimateController();
+            uxController = new UXController();
 
             // wire things up
             WireUpEventing();
@@ -33,15 +33,10 @@ namespace Therm
 
         protected void ConfigurePeripherals()
         {
-            _tempSensor = new AnalogTemperature(
-                IOMap.AnalogTempSensor.Device, IOMap.AnalogTempSensor.Pin,
+            temperatureSensor = new AnalogTemperature(
+                IOMap.AnalogTempSensor.Device, 
+                IOMap.AnalogTempSensor.Pin,
                 AnalogTemperature.KnownSensorType.TMP35);
-        }
-
-        protected void InitializeControllers()
-        {
-            _climateController = new ClimateController();
-            _uxController = new UXController();
         }
 
         /// <summary>
@@ -50,7 +45,7 @@ namespace Therm
         protected void WireUpEventing()
         {
             // subscribe to 1/4º C changes in temp
-            _tempSensor.Subscribe(new FilterableChangeObserver<AtmosphericConditionChangeResult, AtmosphericConditions>(
+            temperatureSensor.Subscribe(new FilterableChangeObserver<AtmosphericConditionChangeResult, AtmosphericConditions>(
                 h => {
                     // probably update screen or something
                     Console.WriteLine($"Update from temp sensor: {h.New.Temperature}ºC");
@@ -71,7 +66,7 @@ namespace Therm
             // take an initial reading of the temp
             Console.WriteLine("Start");
             // BUGBUG: this doesn't seem to be returning
-            var conditions = await _tempSensor.Read();
+            var conditions = await temperatureSensor.Read();
 
             // what's weird here is that the screen will update before i see
             // the output of this in the meadow window.
@@ -85,7 +80,7 @@ namespace Therm
 
             //
             Console.WriteLine("Starting up the temp sensor.");
-            _tempSensor.StartUpdating(standbyDuration: 1000);
+            temperatureSensor.StartUpdating(standbyDuration: 1000);
 
             Console.WriteLine("Temp sensor spinning");
         }
