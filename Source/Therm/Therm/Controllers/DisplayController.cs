@@ -43,17 +43,10 @@ namespace Therm
         /// </summary>
         protected void InitializeDisplay()
         {
-            Console.WriteLine("1");
-
             // our display needs mode3
             var spiConfig = new SpiClockConfiguration(
                 6000,
                 SpiClockConfiguration.Mode.Mode3);
-
-            Console.WriteLine("2");
-
-            if (ThermApp.Device == null)
-                Console.WriteLine("null");
 
             // initialize our SPI bus, with that config
             var spiBus = ThermApp.Device.CreateSpiBus(
@@ -61,8 +54,6 @@ namespace Therm
                 IODeviceMap.Display.MosiPin,
                 IODeviceMap.Display.MisoPin,
                 spiConfig);
-
-            Console.WriteLine("3");
 
             // new up the actual display on the SPI bus
             display = new St7789(
