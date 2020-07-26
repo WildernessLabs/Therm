@@ -22,15 +22,15 @@ namespace Therm
         /// <summary>
         /// local climate state.
         /// </summary>
-        protected ClimateModel _climate;
+        protected ClimateModel climate;
 
         // internals
-        protected St7789 _display;
-        protected GraphicsLibrary _graphics;
+        protected St7789 display;
+        protected GraphicsLibrary graphics;
 
         // rending state and lock
-        protected bool _isRendering = false;
-        protected object _renderLock = new object();
+        protected bool isRendering = false;
+        protected object renderLock = new object();
 
         public DisplayController()
         {
@@ -55,18 +55,16 @@ namespace Therm
             if (ThermApp.Device == null)
                 Console.WriteLine("null");
 
-
             // initialize our SPI bus, with that config
             var spiBus = ThermApp.Device.CreateSpiBus(
                 IOMap.Display.ClockPin,
                 IOMap.Display.MosiPin,
-                null,
                 spiConfig);
 
             Console.WriteLine("3");
 
             // new up the actual display on the SPI bus
-            _display = new St7789(
+            display = new St7789(
                 device: ThermApp.Device,
                 spiBus: spiBus,
                 chipSelectPin: null,
@@ -76,7 +74,7 @@ namespace Therm
 
             // create our graphics surface that we'll draw onto and then blit
             // to the display with.
-            _graphics = new GraphicsLibrary(_display)
+            graphics = new GraphicsLibrary(display)
             {   // my display is upside down
                 // Rotation = GraphicsLibrary.RotationType._180Degrees,
                 CurrentFont = new Font12x20(),
@@ -85,7 +83,7 @@ namespace Therm
             Console.WriteLine("Clear display");
 
             // finally, clear the display so it's ready for action
-            _graphics.Clear(true);
+            graphics.Clear(true);
 
             Render();
         }
@@ -98,7 +96,7 @@ namespace Therm
         /// screen.</param>
         public void UpdateClimate(ClimateModel model)
         {
-            _climate = model;
+            climate = model;
             // update the screen
             Render();
         }
@@ -109,40 +107,40 @@ namespace Therm
         /// </summary>
         protected void Render()
         {
-            Console.WriteLine($"Render() - is rendering: {_isRendering}");
+            Console.WriteLine($"Render() - is rendering: {isRendering}");
 
-            lock (_renderLock)
+            lock (renderLock)
             {   // if we're already rendering, bail out.
-                if (_isRendering)
+                if (isRendering)
                 {
                     Console.WriteLine("Already in a rendering loop, bailing out.");
                     return;
                 }
 
-                _isRendering = true;
+                isRendering = true;
             }
 
             //            Task.Run(() => {
             //rendering tasks on BG thread
             Console.WriteLine("Clear");
 
-            _graphics.Clear();
+            graphics.Clear();
 
             Console.WriteLine("DrawText");
-            if(_climate != null && _climate.CurrentConditions != null)
+            if(climate != null && climate.CurrentConditions != null)
             {
-                _graphics.DrawText(4, 4, $"current temp: {_climate.CurrentConditions.Temperature.Value.ToString("###")}°", Color.FromHex("24abe3"));
-                _graphics.DrawText(4, 20, $"desired temp: {_climate.DesiredTemperature.ToString("###")}°", Color.FromHex("EF7D3B"));
+                graphics.DrawText(4, 4, $"current temp: {climate.CurrentConditions.Temperature.Value.ToString("###")}°", Color.FromHex("24abe3"));
+                graphics.DrawText(4, 20, $"desired temp: {climate.DesiredTemperature.ToString("###")}°", Color.FromHex("EF7D3B"));
 
             }
-            _graphics.DrawText(4, 40, "all temps Canadian", Color.White);
+            graphics.DrawText(4, 40, "all temps Canadian", Color.White);
             Console.WriteLine("Show");
-            _graphics.Show();
+            graphics.Show();
             //            });
 
             Console.WriteLine("Show complete");
 
-            _isRendering = false;
+            isRendering = false;
             
         }
     }
