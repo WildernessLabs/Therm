@@ -11,11 +11,11 @@ namespace Therm
     /// </summary>
     public class UXController
     {
-        protected DisplayController _displayController;
+        protected DisplayController displayController;
 
-        protected IButton _upButton;
-        protected IButton _downButton;
-        protected IButton _modeButton;
+        protected IButton upButton;
+        protected IButton downButton;
+        protected IButton modeButton;
 
         public UXController()
         {
@@ -25,11 +25,11 @@ namespace Therm
 
         protected void InitControllers()
         {
-            _displayController = new DisplayController();
+            displayController = new DisplayController();
 
             // when there's an update from the touch screen, send it on to the
             // model manager (future functionality)
-            _displayController.ClimateModelChanged += (s, e) => {
+            displayController.ClimateModelChanged += (s, e) => {
                 ThermApp.ModelManager.UpdateDesiredClimate(e.Model);
             };
 
@@ -37,7 +37,7 @@ namespace Therm
             ThermApp.ModelManager.Subscribe(new FilterableObserver<ClimateModelChangeResult, ClimateModel>(
                 h => {
                     Console.WriteLine("UXController: Climate model changed, updating display.");
-                    _displayController.UpdateClimate(ThermApp.ModelManager.Climate);
+                    displayController.UpdateClimate(ThermApp.ModelManager.Climate);
                 }
             ));
 
@@ -48,11 +48,11 @@ namespace Therm
         {
             Console.WriteLine("UXController.InitializePeripherals");
 
-            _upButton = new PushButton(IOMap.Buttons.Device, IOMap.Buttons.UpPin);
-            _downButton = new PushButton(IOMap.Buttons.Device, IOMap.Buttons.DownPin);
-            _modeButton = new PushButton(IOMap.Buttons.Device, IOMap.Buttons.ModePin);
+            upButton = new PushButton(IOMap.Buttons.Device, IOMap.Buttons.UpPin);
+            downButton = new PushButton(IOMap.Buttons.Device, IOMap.Buttons.DownPin);
+            modeButton = new PushButton(IOMap.Buttons.Device, IOMap.Buttons.ModePin);
 
-            _upButton.Clicked += (s,e) => {
+            upButton.Clicked += (s,e) => {
                 // TODO: do some checks here:
                 //if(this._climateModel.DesiredTemperature + 1 < someMax) {
                 Console.WriteLine("Up button");
@@ -61,7 +61,7 @@ namespace Therm
                 ThermApp.ModelManager.UpdateDesiredClimate(newClimate);
             };
 
-            _downButton.Clicked += (s,e) => {
+            downButton.Clicked += (s,e) => {
                 //if(this._climateModel.DesiredTemperature - 1 > someMin) {
                 Console.WriteLine("Down button");
                 ClimateModel newClimate = ClimateModel.From(ThermApp.ModelManager.Climate);
@@ -69,7 +69,7 @@ namespace Therm
                 ThermApp.ModelManager.UpdateDesiredClimate(newClimate);
             };
 
-            _modeButton.Clicked += (s, e) => {
+            modeButton.Clicked += (s, e) => {
                 Console.WriteLine("Mode button");
                 ClimateModel newClimate = ClimateModel.From(ThermApp.ModelManager.Climate);
                 // cycle to the next mode
