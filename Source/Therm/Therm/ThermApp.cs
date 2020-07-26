@@ -50,13 +50,15 @@ namespace Therm
         protected void WireUpEventing()
         {
             // subscribe to 1/4º C changes in temp
-            _tempSensor.Subscribe(new FilterableObserver<AtmosphericConditionChangeResult, AtmosphericConditions>(
+            _tempSensor.Subscribe(new FilterableChangeObserver<AtmosphericConditionChangeResult, AtmosphericConditions>(
                 h => {
                     // probably update screen or something
                     Console.WriteLine($"Update from temp sensor: {h.New.Temperature}ºC");
-                    ModelManager.UpdateAmbientTemp(h.New.Temperature);
+                    ModelManager.UpdateAmbientTemp(h.New.Temperature.Value);
                 },
-                e => { return (Math.Abs(e.Delta.Temperature) > 0.25f); }));
+                e => {
+                    return Math.Abs(e.Delta.Temperature.Value) > 0.25f; 
+                }));
         }
 
         /// <summary>
@@ -78,7 +80,7 @@ namespace Therm
             Console.WriteLine($"Initial temp: {conditions.Temperature}");
 
             // it's more reliable if we actually just set a literal here.
-            ModelManager.UpdateAmbientTemp(conditions.Temperature);
+            ModelManager.UpdateAmbientTemp(conditions.Temperature.Value);
             //ModelManager.UpdateAmbientTemp(20f);
 
             //

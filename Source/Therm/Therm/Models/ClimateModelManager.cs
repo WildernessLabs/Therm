@@ -9,7 +9,7 @@ namespace Therm
     /// place in which to access it, and have all subscribers listen to changes
     /// to it in one place.
     /// </summary>
-    public class ClimateModelManager : FilterableObservableBase<ClimateModelChangeResult, ClimateModel>
+    public class ClimateModelManager : FilterableChangeObservableBase<ClimateModelChangeResult, ClimateModel>
     {
         public event EventHandler<ClimateModelChangeResult> Updated = delegate { };
 
