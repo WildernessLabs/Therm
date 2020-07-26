@@ -59,6 +59,7 @@ namespace Therm
             var spiBus = ThermApp.Device.CreateSpiBus(
                 IOMap.Display.ClockPin,
                 IOMap.Display.MosiPin,
+                IOMap.Display.MisoPin,
                 spiConfig);
 
             Console.WriteLine("3");

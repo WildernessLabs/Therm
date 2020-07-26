@@ -9,11 +9,13 @@ namespace Therm
         public static (IIODevice IODevice,
                         IPin ClockPin,
                         IPin MosiPin,
+                        IPin MisoPin,
                         IPin DCPin,
                         IPin ResetPin) Display = (
             ThermApp.Device,
             ThermApp.Device.Pins.SCK,
             ThermApp.Device.Pins.MOSI,
+            ThermApp.Device.Pins.MISO,
             ThermApp.Device.Pins.D01,
             ThermApp.Device.Pins.D00);
 
