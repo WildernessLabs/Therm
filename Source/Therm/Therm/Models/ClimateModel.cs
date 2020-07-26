@@ -17,8 +17,8 @@ namespace Therm
 
         public ClimateModelChangeResult(ClimateModel newValue, ClimateModel oldValue)
         {
-            this.New = newValue;
-            this.Old = oldValue;
+            New = newValue;
+            Old = oldValue;
         }
     }
 
@@ -26,27 +26,21 @@ namespace Therm
     {
         public float DesiredTemperature { get; set; }
 
-        public ClimateController.Mode HvacOperatingMode {
-            get; set;
-        } = ClimateController.Mode.Off;
+        public ClimateController.Mode HvacOperatingMode { get; set; } = ClimateController.Mode.Off;
 
-        public AtmosphericConditions CurrentConditions {
-            get; set;
-        } = new AtmosphericConditions();
+        public AtmosphericConditions CurrentConditions { get; set; } = new AtmosphericConditions();
 
         public ClimateModel()
-        {
-        }
+        { }
 
         public ClimateModel(
             float desiredTemperature,
             ClimateController.Mode hvacOperatingMode,
-            AtmosphericConditions currentConditions
-            )
+            AtmosphericConditions currentConditions)
         {
-            this.DesiredTemperature = desiredTemperature;
-            this.HvacOperatingMode = hvacOperatingMode;
-            this.CurrentConditions = currentConditions;
+            DesiredTemperature = desiredTemperature;
+            HvacOperatingMode = hvacOperatingMode;
+            CurrentConditions = currentConditions;
         }
 
         public static ClimateModel From(ClimateModel model)
@@ -54,10 +48,8 @@ namespace Therm
             return new ClimateModel(
                 model.DesiredTemperature,
                 model.HvacOperatingMode,
-                AtmosphericConditions.From(model.CurrentConditions)
-                );
+                AtmosphericConditions.From(model.CurrentConditions) );
         }
-
     }
 
     public class ClimateModelResult : EventArgs
@@ -66,7 +58,7 @@ namespace Therm
 
         public ClimateModelResult(ClimateModel model)
         {
-            this.Model = model;
+            Model = model;
         }
     }
 }
