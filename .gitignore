@@ -328,3 +328,9 @@ ASALocalRun/
 
 # MFractors (Xamarin productivity tool) working folder 
 .mfractor/
+
+# secrets
+**/Secrets.cs
+
+# macOS bullshit
+**/.DS_Store
