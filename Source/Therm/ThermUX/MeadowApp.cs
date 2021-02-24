@@ -22,23 +22,23 @@ namespace ThermUX
         {
             Console.WriteLine("Start...");
             
-            buttonUp = new PushButton(Device, Device.Pins.D02);
-            buttonUp.Clicked += ButtonUpClicked;
+            //buttonUp = new PushButton(Device, Device.Pins.D02);
+            //buttonUp.Clicked += ButtonUpClicked;
             
-            buttonDown = new PushButton(Device, Device.Pins.D03);
-            buttonDown.Clicked += ButtonDownClicked;
+            //buttonDown = new PushButton(Device, Device.Pins.D03);
+            //buttonDown.Clicked += ButtonDownClicked;
             
-            buttonMode = new PushButton(Device, Device.Pins.D04);
-            buttonMode.Clicked += ButtonModeClicked;
+            //buttonMode = new PushButton(Device, Device.Pins.D04);
+            //buttonMode.Clicked += ButtonModeClicked;
 
-            var config = new SpiClockConfiguration(6000, SpiClockConfiguration.Mode.Mode3);
+            var config = new SpiClockConfiguration(48000, SpiClockConfiguration.Mode.Mode3);
             st7789 = new St7789
             (
                 device: Device,
                 spiBus: Device.CreateSpiBus(Device.Pins.SCK, Device.Pins.MOSI, Device.Pins.MISO, config),
                 chipSelectPin: null,
-                dcPin: Device.Pins.D01,
-                resetPin: Device.Pins.D00,
+                dcPin: Device.Pins.D00,
+                resetPin: Device.Pins.D02,
                 width: 240, height: 240
             );
 

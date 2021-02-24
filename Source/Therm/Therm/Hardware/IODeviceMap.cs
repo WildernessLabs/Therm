@@ -15,12 +15,12 @@ namespace Therm
             ThermApp.Device.Pins.SCK,
             ThermApp.Device.Pins.MOSI,
             ThermApp.Device.Pins.MISO,
-            ThermApp.Device.Pins.D01,
-            ThermApp.Device.Pins.D00);
+            ThermApp.Device.Pins.D00,
+            ThermApp.Device.Pins.D02);
 
         // temp sensor
         public static (IIODevice Device, IPin Pin) AnalogTempSensor = (
-            ThermApp.Device, ThermApp.Device.Pins.A00);
+            ThermApp.Device, ThermApp.Device.Pins.A02);
 
         // HVAC Control
         public static (IIODevice Device,
@@ -28,9 +28,9 @@ namespace Therm
                         IPin AirConPin,
                         IPin FanPin) HVac = (
             ThermApp.Device,
-            ThermApp.Device.Pins.D10,
-            ThermApp.Device.Pins.D11,
-            ThermApp.Device.Pins.D12);
+            ThermApp.Device.Pins.D09,
+            ThermApp.Device.Pins.D06,
+            ThermApp.Device.Pins.D04);
 
         // Buttons
         public static (IIODevice Device,
@@ -38,9 +38,9 @@ namespace Therm
                         IPin DownPin,
                         IPin ModePin) Buttons = (
             ThermApp.Device,
-            ThermApp.Device.Pins.D03,
-            ThermApp.Device.Pins.D04,
-            ThermApp.Device.Pins.D05);
+            ThermApp.Device.Pins.D11,
+            ThermApp.Device.Pins.D12,
+            ThermApp.Device.Pins.D13);
 
         static IODeviceMap()
         {

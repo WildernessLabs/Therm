@@ -6,11 +6,25 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Functional_Test_Apps", "Fun
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Analog_Temp_Sensor", "Functional_Test_Apps\Analog_Temp_Sensor\Analog_Temp_Sensor.csproj", "{9027EA7A-272B-421D-B20E-626E657C0A69}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Therm", "Therm\Therm.csproj", "{F0B3E698-C1A3-4CD5-B043-1E965454CC25}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Therm", "Therm\Therm.csproj", "{F0B3E698-C1A3-4CD5-B043-1E965454CC25}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HackKitDisplay", "Functional_Test_Apps\HackKitDisplay\HackKitDisplay.csproj", "{F91B0767-E873-42B2-A951-FD91BA03006E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThermUX", "ThermUX\ThermUX.csproj", "{E60C9FF1-0298-4308-B8E9-2259468374F1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Therm_PCB_Diagnostic", "Functional_Test_Apps\Therm_PCB_Diagnostic\Therm_PCB_Diagnostic.csproj", "{90B58911-F7C5-421F-8006-676AC3DC9AFA}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Project References", "Project References", "{A923F043-26E2-46B7-9A20-B3636F3CC861}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Meadow.Core", "..\..\..\Meadow.Core\source\Meadow.Core\Meadow.Core.csproj", "{3DA8657C-3E98-4091-90EC-93CEAD05B04E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Meadow.Foundation.Core", "..\..\..\Meadow.Foundation\Source\Meadow.Foundation.Core\Meadow.Foundation.Core.csproj", "{83829C54-75C8-4C14-9B1F-0672087D7BA2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MicroGraphics", "..\..\..\Meadow.Foundation\Source\Meadow.Foundation.Libraries_and_Frameworks\Graphics\MicroGraphics\Driver\Graphics.MicroGraphics\MicroGraphics.csproj", "{2F9B82CF-F109-4A97-8321-2E2979D914EC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Meadow.Foundation.Web.Maple.Server", "..\..\..\Meadow.Foundation\Source\Meadow.Foundation.Libraries_and_Frameworks\Web.Maple\Driver\Web.Maple.Server\Meadow.Foundation.Web.Maple.Server.csproj", "{0D8C2746-38A9-49D6-9C06-33216DD1B489}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Displays.TftSpi", "..\..\..\Meadow.Foundation\Source\Meadow.Foundation.Peripherals\Displays.TftSpi\Driver\Displays.TftSpi\Displays.TftSpi.csproj", "{0C341E7E-6477-4620-8014-E188BC81E0C3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -36,6 +50,30 @@ Global
 		{E60C9FF1-0298-4308-B8E9-2259468374F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E60C9FF1-0298-4308-B8E9-2259468374F1}.Release|Any CPU.Build.0 = Release|Any CPU
 		{E60C9FF1-0298-4308-B8E9-2259468374F1}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{90B58911-F7C5-421F-8006-676AC3DC9AFA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{90B58911-F7C5-421F-8006-676AC3DC9AFA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{90B58911-F7C5-421F-8006-676AC3DC9AFA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{90B58911-F7C5-421F-8006-676AC3DC9AFA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3DA8657C-3E98-4091-90EC-93CEAD05B04E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3DA8657C-3E98-4091-90EC-93CEAD05B04E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3DA8657C-3E98-4091-90EC-93CEAD05B04E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3DA8657C-3E98-4091-90EC-93CEAD05B04E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{83829C54-75C8-4C14-9B1F-0672087D7BA2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{83829C54-75C8-4C14-9B1F-0672087D7BA2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{83829C54-75C8-4C14-9B1F-0672087D7BA2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{83829C54-75C8-4C14-9B1F-0672087D7BA2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2F9B82CF-F109-4A97-8321-2E2979D914EC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2F9B82CF-F109-4A97-8321-2E2979D914EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2F9B82CF-F109-4A97-8321-2E2979D914EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2F9B82CF-F109-4A97-8321-2E2979D914EC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0D8C2746-38A9-49D6-9C06-33216DD1B489}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0D8C2746-38A9-49D6-9C06-33216DD1B489}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0D8C2746-38A9-49D6-9C06-33216DD1B489}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0D8C2746-38A9-49D6-9C06-33216DD1B489}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0C341E7E-6477-4620-8014-E188BC81E0C3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0C341E7E-6477-4620-8014-E188BC81E0C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0C341E7E-6477-4620-8014-E188BC81E0C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0C341E7E-6477-4620-8014-E188BC81E0C3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -43,6 +81,12 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{9027EA7A-272B-421D-B20E-626E657C0A69} = {23A9D1FA-8F8D-439A-8FB8-EF458CC7C873}
 		{F91B0767-E873-42B2-A951-FD91BA03006E} = {23A9D1FA-8F8D-439A-8FB8-EF458CC7C873}
+		{90B58911-F7C5-421F-8006-676AC3DC9AFA} = {23A9D1FA-8F8D-439A-8FB8-EF458CC7C873}
+		{3DA8657C-3E98-4091-90EC-93CEAD05B04E} = {A923F043-26E2-46B7-9A20-B3636F3CC861}
+		{83829C54-75C8-4C14-9B1F-0672087D7BA2} = {A923F043-26E2-46B7-9A20-B3636F3CC861}
+		{2F9B82CF-F109-4A97-8321-2E2979D914EC} = {A923F043-26E2-46B7-9A20-B3636F3CC861}
+		{0D8C2746-38A9-49D6-9C06-33216DD1B489} = {A923F043-26E2-46B7-9A20-B3636F3CC861}
+		{0C341E7E-6477-4620-8014-E188BC81E0C3} = {A923F043-26E2-46B7-9A20-B3636F3CC861}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {3E65A8A6-9067-4100-BDB0-776EF55F2E7C}
